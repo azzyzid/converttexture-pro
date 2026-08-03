@@ -1,1 +1,245 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#070909">
+  <meta name="description" content="ConvertTexture — converter versi, optimizer, dan Bedrock/Geyser converter untuk resource pack Minecraft.">
+  <title>ConvertTexture</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-orb orb-a"></div><div class="auth-orb orb-b"></div>
+    <section class="auth-card">
+      <a class="auth-brand" href="#" aria-label="ConvertTexture">
+        <span class="brand-icon">ϟ</span><strong>Convert<span>Texture</span></strong>
+      </a>
+      <div class="auth-heading">
+        <span class="eyebrow">MINECRAFT RESOURCE PACK TOOLKIT</span>
+        <h1 id="authTitle">Masuk ke workspace</h1>
+        <p id="authSubtitle">Kelola konversi, optimasi, kuota, dan riwayat proses dari satu dashboard.</p>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <label>Username atau email<input name="username" autocomplete="username" required placeholder="Masukkan username"></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" required placeholder="Minimal 8 karakter"></label>
+        <button class="btn primary full" type="submit">Masuk</button>
+      </form>
+      <form id="registerForm" class="auth-form hidden">
+        <label>Username<input name="username" autocomplete="username" required pattern="[a-zA-Z0-9_]{3,32}" placeholder="contoh: azzam_dev"></label>
+        <label>Email <span class="muted">(opsional)</span><input name="email" type="email" autocomplete="email" placeholder="nama@email.com"></label>
+        <label>Password<input name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Minimal 8 karakter"></label>
+        <button class="btn primary full" type="submit">Buat akun Free</button>
+      </form>
+      <button id="authSwitch" class="auth-switch" type="button">Belum punya akun? <b>Daftar</b></button>
+      <div class="auth-note"><span>✓</span> File resource pack diproses di browser. Server hanya menyimpan akun, kuota, dan log pekerjaan.</div>
+    </section>
+  </div>
 
+  <div id="appShell" class="app-shell hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="brand-row">
+        <a class="brand" href="#dashboard"><span class="brand-icon">ϟ</span><strong>Convert<span>Texture</span></strong></a>
+        <button id="sidebarClose" class="icon-btn mobile-only" aria-label="Tutup menu">×</button>
+      </div>
+      <nav class="nav">
+        <p class="nav-label">WORKSPACE</p>
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">⌂</span><span>Dashboard</span></button>
+        <button class="nav-item" data-view="version"><span class="nav-icon">⇄</span><span>Version Converter</span></button>
+        <button class="nav-item" data-view="optimize"><span class="nav-icon">◇</span><span>Optimize Tools</span></button>
+        <button class="nav-item" data-view="bedrock"><span class="nav-icon">▣</span><span>Bedrock Converter</span></button>
+        <p class="nav-label spaced">MONITOR</p>
+        <button class="nav-item" data-view="queue"><span class="nav-icon">≡</span><span>Queue Monitor</span><span id="queueBadge" class="nav-badge">0</span></button>
+        <button class="nav-item" data-view="history"><span class="nav-icon">↺</span><span>My History</span></button>
+        <button id="adminNav" class="nav-item hidden" data-view="admin"><span class="nav-icon">⚙</span><span>Admin Dashboard</span></button>
+      </nav>
+      <div class="upgrade-card">
+        <span class="upgrade-icon">✦</span>
+        <div><strong>Butuh kuota lebih?</strong><p>Free maksimal 1 proses setiap 4 hari.</p></div>
+        <button class="btn ghost small" data-upgrade>Hubungi admin</button>
+      </div>
+      <button id="sidebarAccount" class="sidebar-account">
+        <span id="sidebarAvatar" class="avatar">A</span>
+        <span><strong id="sidebarUsername">Account</strong><small id="sidebarPlan">FREE PLAN</small></span>
+        <b>⋮</b>
+      </button>
+    </aside>
+
+    <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="menuButton" class="icon-btn mobile-only" aria-label="Buka menu">☰</button>
+        <a class="brand topbar-brand" href="#dashboard"><span class="brand-icon">ϟ</span><strong>Convert<span>Texture</span></strong></a>
+        <div class="topbar-actions">
+          <span id="quotaChip" class="quota-chip">Free · 1/4 hari</span>
+          <button id="refreshButton" class="icon-btn" title="Refresh data">↻</button>
+          <button id="accountButton" class="avatar-button"><span id="topAvatar">A</span></button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="view active" data-view-panel="dashboard">
+          <div class="hero">
+            <div class="hero-grid"></div>
+            <div class="hero-copy">
+              <span class="pill"><i></i> Cross-platform resource pack engine</span>
+              <h1>Convert, optimize, dan bawa texture pack-mu ke <span>semua platform.</span></h1>
+              <p>Tools khusus ItemsAdder, Oraxen, Nexo, dan resource pack vanilla. Proses file secara lokal dengan log aktivitas dan kontrol kuota dari server.</p>
+              <div class="hero-actions"><button class="btn primary" data-open-view="version">Mulai konversi</button><button class="btn secondary" data-open-view="optimize">Optimize pack</button></div>
+            </div>
+            <div class="hero-art" aria-hidden="true"><div class="stack-card one">JSON</div><div class="stack-card two">ZIP</div><div class="stack-card three">MC</div><span class="float-tag t1">1.21.4+</span><span class="float-tag t2">Geyser v2</span></div>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric"><span class="metric-icon blue">≡</span><div><small>TOTAL JOBS</small><strong id="metricTotal">0</strong><p>Semua proses akunmu</p></div></article>
+            <article class="metric"><span class="metric-icon green">✓</span><div><small>COMPLETED</small><strong id="metricDone">0</strong><p>Konversi selesai</p></div></article>
+            <article class="metric"><span class="metric-icon amber">◷</span><div><small>QUOTA</small><strong id="metricQuota">1</strong><p id="metricQuotaNote">Tersisa pada periode ini</p></div></article>
+            <article class="metric"><span class="metric-icon purple">↓</span><div><small>SPACE SAVED</small><strong id="metricSaved">0 B</strong><p>Dari optimizer</p></div></article>
+          </div>
+
+          <div class="section-heading"><div><span class="eyebrow">CORE TOOLS</span><h2>Pilih workflow</h2></div></div>
+          <div class="tool-cards">
+            <button class="tool-card" data-open-view="version"><span class="tool-icon green">⇄</span><div><h3>Version Converter</h3><p>Ubah pack format dan konversi legacy CustomModelData ke item-model 1.21.4+.</p><span>Open tool →</span></div></button>
+            <button class="tool-card" data-open-view="optimize"><span class="tool-icon blue">◇</span><div><h3>Optimize Tools</h3><p>Bersihkan file sampah, minify JSON, proteksi font/glyph, scaling, dan kompres texture.</p><span>Open tool →</span></div></button>
+            <button class="tool-card" data-open-view="bedrock"><span class="tool-icon purple">▣</span><div><h3>Bedrock & Geyser</h3><p>Buat .mcpack dan custom mappings v2 untuk item texture sederhana.</p><span>Open tool →</span></div></button>
+          </div>
+
+          <div class="split-grid">
+            <section class="panel"><div class="panel-title"><div><span class="eyebrow">RECENT</span><h2>Aktivitas terbaru</h2></div><button class="text-btn" data-open-view="queue">Lihat semua</button></div><div id="recentJobs" class="job-list empty-box">Belum ada aktivitas.</div></section>
+            <section class="panel info-panel"><span class="pill"><i></i> SAFE PROCESSING</span><h2>Font dan glyph tetap aman</h2><p>Optimizer melindungi folder font, glyph, GUI, colormap, particle, dan atlas dari penghapusan otomatis. Hanya asset yang terdeteksi aman yang dibersihkan.</p><div class="safe-list"><span>✓ Browser-local file processing</span><span>✓ Server tidak menyimpan ZIP</span><span>✓ Laporan kompatibilitas</span></div></section>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="version">
+          <div class="page-head"><div><span class="eyebrow">JAVA RESOURCE PACK</span><h1>Version converter</h1><p>Konversi pack lama berbasis CustomModelData ke format item-model baru atau sesuaikan pack_format untuk versi target.</p></div><span class="status-tag">Legacy ↔ Modern</span></div>
+          <div class="workspace-grid">
+            <section class="panel work-panel">
+              <div class="upload-zone" id="versionDrop"><input id="versionFile" type="file" accept=".zip,application/zip" hidden><span class="upload-icon">⇧</span><h3>Pilih resource pack Java (.zip)</h3><p>ItemsAdder, Oraxen, Nexo, atau pack vanilla.</p><button class="btn secondary small" type="button">Browse Files</button></div>
+              <div id="versionFileCard" class="selected-file hidden"></div>
+              <label class="field">Target Minecraft version (pack_format)
+                <select id="versionTarget">
+                  <option value="46">Minecraft 1.21.4 (Format 46 · Item Models)</option>
+                  <option value="42">Minecraft 1.21.2–1.21.3 (Format 42)</option>
+                  <option value="34" selected>Minecraft 1.21–1.21.1 (Format 34)</option>
+                  <option value="32">Minecraft 1.20.5–1.20.6 (Format 32)</option>
+                  <option value="22">Minecraft 1.20.3–1.20.4 (Format 22)</option>
+                  <option value="18">Minecraft 1.20.2 (Format 18)</option>
+                  <option value="15">Minecraft 1.20–1.20.1 (Format 15)</option>
+                </select>
+              </label>
+              <div class="option-row"><label class="switch-line"><input id="versionBackup" type="checkbox" checked><span></span><div><strong>Keep legacy model files</strong><small>File model lama tetap dipertahankan sebagai fallback.</small></div></label></div>
+              <button id="versionRun" class="btn primary full" disabled>Convert resource pack</button>
+            </section>
+            <aside class="panel log-panel"><div class="panel-title"><div><span class="eyebrow">PROCESS OUTPUT</span><h2>Conversion logs</h2></div><span id="versionState" class="status-tag neutral">Idle</span></div><pre id="versionLogs" class="console">Belum ada proses konversi...</pre><div id="versionResult" class="result-box hidden"></div></aside>
+          </div>
+          <div class="note-card"><strong>Catatan kompatibilitas</strong><p>Konverter modern menangani override CustomModelData standar dan item-model range dispatch. Model kompleks, shader khusus, CIT/OptiFine, atau logika plugin yang tidak berada di dalam ZIP akan dilaporkan untuk pengecekan manual.</p></div>
+        </section>
+
+        <section class="view" data-view-panel="optimize">
+          <div class="page-head"><div><span class="eyebrow">PACK PERFORMANCE</span><h1>Optimize tools</h1><p>Kurangi ukuran resource pack dengan pembersihan struktur dan pemrosesan texture yang aman.</p></div><span class="status-tag">Font/Glyph protected</span></div>
+          <div class="workspace-grid optimize-layout">
+            <section class="panel work-panel">
+              <div class="upload-zone compact-zone" id="optimizeDrop"><input id="optimizeFile" type="file" accept=".zip,application/zip" hidden><span class="upload-icon">◇</span><h3>Upload resource pack (.zip)</h3><p>File diproses di perangkatmu.</p><button class="btn secondary small" type="button">Browse Files</button></div>
+              <div id="optimizeFileCard" class="selected-file hidden"></div>
+              <div class="config-title">PERFORMANCE PRESET</div>
+              <div class="preset-grid" role="radiogroup" aria-label="Optimization quality preset">
+                <button class="preset-card" type="button" data-opt-preset="low" aria-pressed="false">
+                  <span class="preset-badge potato">LOW</span><strong>Potato / Zalith</strong><small>128px max, compression agresif, shader dibuang. Fokus FPS dan RAM rendah.</small>
+                </button>
+                <button class="preset-card active" type="button" data-opt-preset="medium" aria-pressed="true">
+                  <span class="preset-badge balanced">MEDIUM</span><strong>Balanced</strong><small>256px max, kualitas seimbang. Cocok untuk mayoritas HP dan launcher mobile.</small>
+                </button>
+                <button class="preset-card" type="button" data-opt-preset="high" aria-pressed="false">
+                  <span class="preset-badge quality">HIGH</span><strong>High quality</strong><small>512px max, kompresi ringan. Visual lebih tajam dengan ukuran lebih kecil.</small>
+                </button>
+              </div>
+              <div id="optPresetSummary" class="preset-summary"><strong>MEDIUM · Balanced</strong><span>Texture oversized akan diturunkan maksimal 256px. Font, glyph, GUI, atlas, dan animasi tetap dilindungi.</span></div>
+              <div class="config-title">ADVANCED CONFIGURATION</div>
+              <div class="config-group"><h3>♲ CLEAN & STRUCTURE</h3>
+                <label class="check-line"><input id="optRemoveUnused" type="checkbox"><span><strong>Remove unused textures — safe mode</strong><small>Hanya memindai texture item/block custom. Font, glyph, GUI, atlas, dan dynamic assets tidak dihapus.</small></span></label>
+                <label class="check-line"><input id="optDedup" type="checkbox" checked><span><strong>Smart duplicate consolidation</strong><small>Menggabungkan PNG identik dan memperbarui referensi JSON yang cocok.</small></span></label>
+                <label class="check-line"><input id="optShaders" type="checkbox"><span><strong>Strip custom shaders</strong><small>Menghapus folder shaders untuk kompatibilitas client vanilla.</small></span></label>
+                <label class="check-line"><input id="optMinify" type="checkbox" checked><span><strong>Minify JSON & mcmeta</strong><small>Menghapus whitespace tanpa mengubah isi data.</small></span></label>
+                <label class="check-line"><input id="optSourceFiles" type="checkbox" checked><span><strong>Remove editing/source files</strong><small>Menghapus file kerja seperti PSD, XCF, KRA, BLEND, Aseprite, backup, dan folder Git yang tidak dipakai Minecraft.</small></span></label>
+              </div>
+              <div class="config-group"><h3>⌗ RESOLUTION & SCALING</h3>
+                <label class="check-line"><input id="optPower2" type="checkbox"><span><strong>Power-of-two padding</strong><small>Menambah area transparan hingga dimensi 2ⁿ tanpa meregangkan pixel.</small></span></label>
+                <label class="check-line"><input id="optDownscale" type="checkbox"><span><strong>Downscale oversized textures</strong><small>Resize texture yang melewati batas maksimum.</small></span></label>
+                <label class="inline-field">Maximum dimension<select id="optMaxDimension"><option>128</option><option>256</option><option selected>512</option><option>1024</option><option>2048</option></select></label>
+              </div>
+              <div class="config-group"><h3>▧ PNG COMPRESSION</h3>
+                <label class="check-line"><input id="optLossy" type="checkbox"><span><strong>Lossy palette reduction</strong><small>Mengurangi presisi warna untuk mengecilkan PNG dengan perubahan visual minimal.</small></span></label>
+                <label class="inline-field">Quality<select id="optQuality"><option value="high">High (90–100)</option><option value="medium" selected>Medium (70–90)</option><option value="low">Aggressive (45–70)</option></select></label>
+                <label class="check-line"><input id="optReencode" type="checkbox" checked><span><strong>Lossless browser re-encode</strong><small>Re-encode PNG dan mempertahankan file asli jika hasil lebih besar.</small></span></label>
+              </div>
+              <div class="optimizer-safety"><strong>Safe mobile pipeline</strong><span>Font/glyph tidak disentuh, texture animasi tidak di-resize, pixel-art memakai nearest-neighbor, dan file PNG asli dipertahankan saat re-encode justru lebih besar.</span></div>
+              <button id="optimizeRun" class="btn primary full" disabled>Optimize resource pack</button>
+            </section>
+            <aside class="panel log-panel sticky-panel"><div class="panel-title"><div><span class="eyebrow">LIVE PIPELINE</span><h2>Optimization logs</h2></div><span id="optimizeState" class="status-tag neutral">Idle</span></div><div class="progress-track"><span id="optimizeProgress"></span></div><pre id="optimizeLogs" class="console tall">Belum ada proses optimasi...</pre><div id="optimizeResult" class="result-box hidden"></div></aside>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="bedrock">
+          <div class="page-head"><div><span class="pill"><i></i> Cross-platform Bedrock engine</span><h1>Bedrock & GeyserMC converter</h1><p>Konversi custom item texture Java menjadi .mcpack dan generate Geyser custom item mappings v2.</p></div></div>
+          <div class="workspace-grid">
+            <section class="panel work-panel">
+              <div class="upload-zone" id="bedrockDrop"><input id="bedrockFile" type="file" accept=".zip,application/zip" hidden><span class="upload-icon">▣</span><h3>Select a Java pack (.zip)</h3><p>Converter terbaik untuk item texture 2D dan model generated/handheld.</p><button class="btn secondary small" type="button">Browse Files</button></div>
+              <div id="bedrockFileCard" class="selected-file hidden"></div>
+              <div class="form-grid">
+                <label class="field">Pack name<input id="bedrockPackName" value="ConvertTexture Pack" maxlength="64"></label>
+                <label class="field">Bedrock namespace<input id="bedrockNamespace" value="converttexture" pattern="[a-z0-9_.-]+"></label>
+                <label class="field">Fallback Java base item<input id="bedrockBaseItem" value="minecraft:paper"></label>
+                <label class="field">Minimum Bedrock version<input value="1.20.0" disabled></label>
+              </div>
+              <label class="switch-line"><input id="bedrockIncludeAll" type="checkbox"><span></span><div><strong>Include texture item tanpa mapping</strong><small>Gunakan fallback base item untuk texture yang tidak ditemukan dari override.</small></div></label>
+              <button id="bedrockRun" class="btn primary full" disabled>Generate Bedrock bundle</button>
+            </section>
+            <aside class="panel log-panel"><div class="panel-title"><div><span class="eyebrow">OUTPUT</span><h2>Conversion logs</h2></div><span id="bedrockState" class="status-tag neutral">Idle</span></div><pre id="bedrockLogs" class="console tall">No conversion logs yet...</pre><div id="bedrockResult" class="result-box hidden"></div></aside>
+          </div>
+          <div class="install-grid">
+            <section class="note-card"><strong>GeyserMC installation</strong><ol><li>Taruh file <code>.mcpack</code> atau <code>.zip</code> Bedrock ke folder <code>packs/</code>.</li><li>Taruh mapping JSON ke folder <code>custom_mappings/</code>.</li><li>Pastikan custom content aktif lalu restart Geyser.</li></ol></section>
+            <section class="note-card warning"><strong>Batas converter</strong><p>Geometry 3D Java, entity model, shader, font provider, CIT/OptiFine, dan display entity tidak selalu mempunyai padanan otomatis di Bedrock. Tool akan memakai icon layer0 dan menulis peringatan pada laporan.</p></section>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="queue">
+          <div class="page-head"><div><span class="eyebrow">REAL-TIME OVERVIEW</span><h1>Queue monitor <span id="queueCountTag" class="inline-tag">0 tasks</span></h1><p id="queueSubtitle">Semua proses akunmu dan status pemrosesannya.</p></div><button id="queueRefresh" class="btn secondary small">Refresh</button></div>
+          <div class="metric-grid queue-metrics">
+            <article class="metric"><span class="metric-icon blue">≡</span><div><small>TOTAL</small><strong id="queueTotal">0</strong></div></article>
+            <article class="metric"><span class="metric-icon blue">ϟ</span><div><small>ACTIVE</small><strong id="queueActive">0</strong></div></article>
+            <article class="metric"><span class="metric-icon amber">◷</span><div><small>QUEUED</small><strong id="queueQueued">0</strong></div></article>
+            <article class="metric"><span class="metric-icon green">✓</span><div><small>DONE</small><strong id="queueDone">0</strong></div></article>
+          </div>
+          <div id="queueList" class="queue-list empty-box">Belum ada task.</div>
+        </section>
+
+        <section class="view" data-view-panel="history">
+          <div class="page-head"><div><span class="eyebrow">ACCOUNT HISTORY</span><h1>My history</h1><p>Riwayat pekerjaan yang tersimpan pada akunmu.</p></div><button id="historyRefresh" class="btn secondary small">Refresh</button></div>
+          <section class="panel"><div id="historyList" class="table-wrap empty-box">Belum ada history.</div></section>
+        </section>
+
+        <section class="view" data-view-panel="admin">
+          <div class="page-head"><div><span class="eyebrow">ADMINISTRATION</span><h1>Admin dashboard</h1><p>Monitor semua user, pekerjaan, log, plan, dan kuota.</p></div><span class="status-tag">Administrator</span></div>
+          <div class="metric-grid"><article class="metric"><span class="metric-icon purple">◎</span><div><small>USERS</small><strong id="adminUsersCount">0</strong></div></article><article class="metric"><span class="metric-icon blue">≡</span><div><small>ALL JOBS</small><strong id="adminJobsCount">0</strong></div></article><article class="metric"><span class="metric-icon green">✓</span><div><small>COMPLETE</small><strong id="adminDoneCount">0</strong></div></article><article class="metric"><span class="metric-icon amber">!</span><div><small>FAILED</small><strong id="adminFailedCount">0</strong></div></article></div>
+          <div class="admin-tabs"><button class="active" data-admin-tab="users">Users & Plans</button><button data-admin-tab="activity">Activity Logs</button></div>
+          <section class="panel admin-tab active" data-admin-panel="users"><div class="panel-title"><div><span class="eyebrow">ACCOUNT MANAGEMENT</span><h2>Registered users</h2></div><button id="adminRefresh" class="btn secondary small">Refresh</button></div><div id="adminUsers" class="table-wrap"></div></section>
+          <section class="panel admin-tab" data-admin-panel="activity"><div class="panel-title"><div><span class="eyebrow">AUDIT TRAIL</span><h2>All activity</h2></div></div><div id="adminActivity" class="activity-feed"></div></section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="accountModal" class="modal" aria-hidden="true"><div class="modal-backdrop" data-close-modal></div><section class="modal-card account-modal"><button class="modal-close" data-close-modal>×</button><span id="modalAvatar" class="big-avatar">A</span><h2 id="modalUsername">Account</h2><p id="modalEmail" class="muted">No email provided</p><span id="modalPlan" class="plan-badge">FREE TIER</span><div class="quota-box"><div><span>Usage quota</span><strong id="modalQuotaValue">0 / 1</strong></div><div class="quota-progress"><span id="modalQuotaBar"></span></div><p id="modalQuotaText">1 process every 4 days</p></div><button class="btn secondary full" data-upgrade>Upgrade via WhatsApp</button><button id="openPassword" class="btn ghost full">Ganti password</button><button id="signOut" class="btn danger full">Sign Out</button></section></div>
+
+  <div id="passwordModal" class="modal" aria-hidden="true"><div class="modal-backdrop" data-close-password></div><section class="modal-card"><button class="modal-close" data-close-password>×</button><h2>Ganti password</h2><form id="passwordForm" class="auth-form"><label>Password lama<input name="currentPassword" type="password" required></label><label>Password baru<input name="newPassword" type="password" minlength="8" required></label><button class="btn primary full">Simpan password baru</button></form></section></div>
+
+  <div id="upgradeModal" class="modal" aria-hidden="true"><div class="modal-backdrop" data-close-upgrade></div><section class="modal-card"><button class="modal-close" data-close-upgrade>×</button><span class="big-upgrade">✦</span><h2>Upgrade plan</h2><p>Plan Free mendapat maksimal 1 penggunaan setiap 4 hari. Hubungi admin untuk mengaktifkan plan Pro.</p><a id="whatsappLink" class="btn primary full" target="_blank" rel="noopener">Chat admin WhatsApp</a><small class="muted center">Nomor admin: 083830287126</small></section></div>
+
+  <div id="toastStack" class="toast-stack"></div>
+  <script src="vendor/jszip.min.js"></script>
+  <script src="tools.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
