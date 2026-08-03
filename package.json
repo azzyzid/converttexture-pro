@@ -1,0 +1,14 @@
+{
+  "name": "converttexture-pro",
+  "version": "2.1.0",
+  "private": true,
+  "description": "Minecraft resource-pack version converter, optimizer, Bedrock/Geyser converter, authentication, quota and admin queue monitor.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js && node --check public/app.js && node --check public/tools.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {}
+}
