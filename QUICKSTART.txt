@@ -1,16 +1,16 @@
-CONVERTTEXTURE PRO — QUICK START
+CONVERTTEXTURE PRO v2.2 — NETLIFY FIX
 
-1. Install Node.js 20+.
-2. Extract project.
-3. Open terminal in this folder.
-4. Run: npm start
-5. Open: http://localhost:3000
+1. Upload/replace seluruh source ke repository GitHub.
+2. Pastikan ada:
+   netlify/functions/api.mjs
+   netlify.toml
+   package.json
+   public/_redirects
+3. Netlify publish directory harus: public
+4. Trigger deploy → Clear cache and deploy site.
+5. Buka /api/health. Harus menampilkan JSON "ok": true.
+6. Login memakai data admin yang dikirim secara privat di chat.
+7. Setelah berhasil login, segera ganti password admin.
 
-Production:
-- Set NODE_ENV=production
-- Set SESSION_SECRET to a long random value
-- Mount the data/ folder as persistent storage
-- Deploy to Render, Railway, Docker, VPS, or a Node-capable panel
-
-Important:
-This is a full-stack website. Static Netlify deployment cannot provide secure login, persistent quota, or admin queue without an external backend/database.
+Registrasi, login, queue, quota, dan log disimpan server-side memakai Netlify Blobs.
+Tidak perlu MySQL atau database eksternal.

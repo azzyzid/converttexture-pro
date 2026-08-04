@@ -1,14 +1,18 @@
 {
   "name": "converttexture-pro",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
-  "description": "Minecraft resource-pack version converter, optimizer, Bedrock/Geyser converter, authentication, quota and admin queue monitor.",
+  "description": "Minecraft resource-pack converter and optimizer with Netlify Functions authentication, quota, queue, and admin logs.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js",
-    "check": "node --check server.js && node --check public/app.js && node --check public/tools.js"
+    "dev": "netlify dev",
+    "check": "node --check server.js && node --check public/app.js && node --check public/tools.js && node --check netlify/functions/api.mjs"
   },
-  "engines": { "node": ">=20" },
-  "dependencies": {}
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@netlify/blobs": "10.7.9"
+  }
 }

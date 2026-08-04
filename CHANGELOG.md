@@ -1,13 +1,18 @@
 # Changelog
 
-## 2.1.0 — Mobile Pack Optimizer
+## 2.2.0 — Netlify authentication fix
 
-- Menambahkan preset Low / Potato, Medium / Balanced, dan High Quality.
-- Low membatasi texture non-sensitif ke 128px dan menghapus custom shader.
-- Medium membatasi texture ke 256px.
-- High membatasi texture ke 512px.
-- Font, glyph, GUI, atlas, colormap, dan texture animasi dilindungi.
-- Menambahkan pembersihan file editor/source seperti PSD, XCF, KRA, BLEND, dan Aseprite.
-- Menambahkan statistik texture yang di-resize dan penghematan byte PNG.
-- Menambahkan yield antar-batch untuk mengurangi freeze pada browser mobile.
-- Nama output menyertakan preset, misalnya `pack-optimized-low.zip`.
+- Memperbaiki error registrasi `Request failed (404)` di Netlify.
+- Menambahkan backend Netlify Functions untuk seluruh endpoint `/api/*`.
+- Menambahkan penyimpanan persisten server-side dengan Netlify Blobs.
+- Admin dibuat otomatis pada request API pertama.
+- Password memakai salted `scrypt` hash.
+- Session memakai cookie HttpOnly, Secure, dan SameSite Strict.
+- Menambahkan rate limit login, registrasi, password, dan update job.
+- Menambahkan routing API dan SPA fallback melalui `netlify.toml` dan `_redirects`.
+- Login, registrasi, quota, queue, activity log, dan admin management kini berfungsi di Netlify.
+
+## 2.1.0 — Resource-pack optimizer presets
+
+- Menambahkan preset Low/Zalith, Medium, dan High.
+- Menambahkan downscale, palette reduction, file cleanup, dan proteksi font/glyph/GUI.
